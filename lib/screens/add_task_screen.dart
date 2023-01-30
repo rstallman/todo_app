@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/task.dart';
+import '../models/task_data.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  final void Function(String) addTaskCallback;
-
-  AddTaskScreen({required this.addTaskCallback});
 
   @override
   Widget build(BuildContext context) {
+
     String? newTaskTitle;
+    var taskData = context.watch<TaskData>();
 
     return Container(
-      color: Color(0xFF757575),
+      color: const Color(0xFF757575),
       child: Container(
         padding: const EdgeInsets.only(
           top: 20,
@@ -35,8 +38,8 @@ class AddTaskScreen extends StatelessWidget {
             TextField(
               autofocus: true,
               textAlign: TextAlign.center,
-              onChanged: (value) {
-                newTaskTitle = value;
+              onChanged: (newText) {
+                newTaskTitle = newText;
               },
             ),
             const SizedBox(
@@ -45,7 +48,8 @@ class AddTaskScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 if (newTaskTitle != null) {
-                  addTaskCallback(newTaskTitle!);
+                  taskData.addTask(Task(name: newTaskTitle!));
+                  Navigator.pop(context);
                 }
               },
               style:
